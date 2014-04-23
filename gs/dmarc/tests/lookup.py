@@ -17,8 +17,8 @@ from unittest import TestCase
 from gs.dmarc.lookup import lookup_receiver_policy, ReceiverPolicy
 
 
-class TestContentType(TestCase):
-    '''Test the content-type guesser component of gs.form'''
+class TestLookup(TestCase):
+    '''Test the lookup of DMARC policies'''
 
     def test_lookup_none(self):
         host = 'example.com'
