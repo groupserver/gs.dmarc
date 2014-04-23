@@ -19,11 +19,13 @@ from version import get_version
 
 version = get_version()
 
-requires = [
-        'setuptools',
-    ]
+requires = []
 if (sys.version_info < (3, 4)):
-    requires += ['enum34']
+    requires += ['setuptools', 'enum34']
+if (sys.version_info >= (3, )):
+    requires += ['dnspython3 >= 1.11.1']
+else:
+    requires += ['dnspython >= 1.11.1']
 
 setup(name='gs.dmarc',
     version=version,
