@@ -14,7 +14,7 @@
 ##############################################################################
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
-from dns.resolver import query as dns_query
+from dns.resolver import query as dns_query, NXDOMAIN
 
 
 class ReceiverPolicy(Enum):
@@ -36,15 +36,16 @@ def answer_to_dict(answer):
 
 def lookup_receiver_policy(host):
     '''Lookup the reciever policy for a host. Returns a ReceiverPolicy.'''
-    retval = ReceiverPolicy.none
-
     dmarcHost = '_dmarc.{0}'.format(host)
-    dnsAnswer = dns_query(dmarcHost, 'TXT')
-    answer = str(dnsAnswer[0])
-    tags = answer_to_dict(answer)
-
-    policy = tags.get('p', 'none')
-    retval = ReceiverPolicy[policy]
+    try:
+        dnsAnswer = dns_query(dmarcHost, 'TXT')
+    except NXDOMAIN:
+        retval = ReceiverPolicy.none
+    else:
+        answer = str(dnsAnswer[0])
+        tags = answer_to_dict(answer)
+        policy = tags.get('p', 'none')
+        retval = ReceiverPolicy[policy]
 
     assert isinstance(retval, ReceiverPolicy)
     return retval

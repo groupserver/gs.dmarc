@@ -14,6 +14,7 @@
 ##############################################################################
 from __future__ import absolute_import, unicode_literals
 from unittest import TestCase
+import dns.resolver
 from mock import MagicMock
 import gs.dmarc.lookup
 
@@ -47,3 +48,9 @@ class TestLookup(TestCase):
     def test_lookup_quarantine(self):
         r = self.lookup_receiver_policy('quarantine')
         self.assertEqual(r, gs.dmarc.lookup.ReceiverPolicy.quarantine)
+
+    def test_lookup_nxdomain(self):
+        gs.dmarc.lookup.dns_query = MagicMock(side_effect=dns.resolver.NXDOMAIN)
+        host = 'example.com'
+        r = gs.dmarc.lookup.lookup_receiver_policy(host)
+        self.assertEqual(r, gs.dmarc.lookup.ReceiverPolicy.none)
