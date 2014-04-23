@@ -14,6 +14,7 @@
 ##############################################################################
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
+from dns.resolver import query as dns_query
 
 
 class ReceiverPolicy(Enum):
@@ -24,8 +25,26 @@ class ReceiverPolicy(Enum):
     reject = 3
 
 
+def answer_to_dict(answer):
+    '''Turn the DNS DMARC answer into a dict of tag:value pairs.'''
+    a = answer.strip('"').strip(' ')
+    rawTags = [t.split('=') for t in a.split(';') if t]
+    tags = [(t[0].strip(), t[1].strip()) for t in rawTags]
+    retval = dict(tags)
+    return retval
+
+
 def lookup_receiver_policy(host):
-    '''Lookup the reciever policy for a host. Returns a ReceiverPolicy'''
+    '''Lookup the reciever policy for a host. Returns a ReceiverPolicy.'''
     retval = ReceiverPolicy.none
+
+    dmarcHost = '_dmarc.{0}'.format(host)
+    dnsAnswer = dns_query(dmarcHost, 'TXT')
+    answer = str(dnsAnswer[0])
+    tags = answer_to_dict(answer)
+
+    policy = tags.get('p', 'none')
+    retval = ReceiverPolicy[policy]
+
     assert isinstance(retval, ReceiverPolicy)
     return retval
