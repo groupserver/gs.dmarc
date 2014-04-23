@@ -1,0 +1,61 @@
+============
+``gs.dmarc``
+============
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Look up and report on the DMARC status of a domain
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:Author: `Michael JasonSmith`_
+:Contact: Michael JasonSmith <mpj17@onlinegroups.net>
+:Date: 2014-04-23
+:Organization: `GroupServer.org`_
+:Copyright: This document is licensed under a
+  `Creative Commons Attribution-Share Alike 4.0 International License`_
+  by `OnlineGroups.net`_.
+
+Introduction
+============
+
+This product contains some functions to look up and report on the
+DMARC (Domain-based Message Authentication, Reporting and
+Conformance) status of a domain [#dmarc]_. DMARC allows the owner
+of a domain to publish a key that is used to verify if an email
+message actually originated from the domain, and to publish what
+to do if the verification fails. It is an extension of DKIM
+(DomainKeys Identified Mail [#dkim]_) and SPF (Sender Policy
+Framework [#spf]_).
+
+Lookup
+======
+
+The ``gs.dmarc.lookup_receiver_policy`` function can look up the
+policy for receiving messages from a host, and report back the
+policy. It returns one of the following policies:
+
+* ``none``
+* ``quarantine``
+* ``reject``
+
+Resources
+=========
+
+- Code repository: https://source.iopen.net/groupserver/gs.dmarc
+- Questions and comments to http://groupserver.org/groups/development
+- Report bugs at https://redmine.iopen.net/projects/groupserver
+
+.. [#dmarc] See `the internet-draft`_ Domain-based Message
+            Authentication, Reporting and Conformance (DMARC)
+.. _the internet-draft: https://datatracker.ietf.org/doc/draft-kucherawy-dmarc-base/?include_text=1
+.. [#dkim] See `RFC 6376`_: DomainKeys Identified Mail (DKIM) Signatures
+.. _RFC 6376: http://tools.ietf.org/html/rfc6376
+.. [#spf] See `RFC 4408`_: Sender Policy Framework (SPF) for
+          Authorizing Use of Domains in E-Mail, Version 1
+.. _RFC 4408: http://tools.ietf.org/html/rfc4408
+.. _GroupServer: http://groupserver.org/
+.. _GroupServer.org: http://groupserver.org/
+.. _OnlineGroups.Net: https://onlinegroups.net
+.. _Michael JasonSmith: http://groupserver.org/p/mpj17
+..  _Creative Commons Attribution-Share Alike 4.0 International License:
+    http://creativecommons.org/licenses/by-sa/4.0/
+
+..  LocalWords:  DMARC DKIM DomainKeys dkim groupserver
