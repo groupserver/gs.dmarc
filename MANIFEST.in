@@ -2,4 +2,5 @@ recursive-include gs *
 recursive-include docs *
 include version.py
 include *.txt
-
+global-exclude *.pyc
+prune-dir gs/dmarc/tests/__pycache__/
