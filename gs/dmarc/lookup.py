@@ -14,7 +14,7 @@
 ##############################################################################
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
-from dns.resolver import query as dns_query, NXDOMAIN
+from dns.resolver import query as dns_query, NXDOMAIN, NoAnswer
 
 
 class ReceiverPolicy(Enum):
@@ -39,7 +39,7 @@ def lookup_receiver_policy(host):
     dmarcHost = '_dmarc.{0}'.format(host)
     try:
         dnsAnswer = dns_query(dmarcHost, 'TXT')
-    except NXDOMAIN:
+    except (NXDOMAIN, NoAnswer):
         retval = ReceiverPolicy.none
     else:
         answer = str(dnsAnswer[0])
