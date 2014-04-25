@@ -48,7 +48,7 @@ def parse_version_from_package():
 
 def get_version():
     try:
-        globalid = execute_command("hg identify -i")
+        globalid = execute_command("hg identify -i").strip('+')
         c = "hg log -r %s --template '{date|isodatesec}'" % globalid
         commitdate = execute_command(c)
         # convert date to UTC unix timestamp, using the date command because
@@ -58,10 +58,13 @@ def get_version():
         # finally we have something we can use!
         dt = datetime.datetime.utcfromtimestamp(timestamp)
         datestring = dt.strftime('%Y%m%d%H%M%S')
+        if release:
+            version_string = version
+        else:
+            version_string = "%s.dev%s-%s" % (version, datestring, globalid)
 
-        version_string = "%s-%s-%s" % (version, datestring, globalid)
-
-    except (CommandError, ValueError, TypeError):
+    except (CommandError, ValueError, TypeError) as e:
+        print (e)
         version_string = parse_version_from_package()
 
     return version_string
