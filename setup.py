@@ -51,7 +51,7 @@ setup(name='gs.dmarc',
     keywords='DKIM, SPF, DMARC, email',
     author='Michael JasonSmith',
     author_email='mpj17@onlinegroups.net',
-    url='http://groupserver.org',
+    url='https://source.iopen.net/groupserver/gs.dmarc/',
     license='ZPL 2.1',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['gs'],
@@ -59,6 +59,7 @@ setup(name='gs.dmarc',
     zip_safe=False,
     install_requires=requires,
     test_suite="gs.dmarc.tests.test_all",
+    tests_require=['mock', ],
     entry_points="""
     # -*- Entry points: -*-
     """,)
