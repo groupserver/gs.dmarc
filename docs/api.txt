@@ -1,0 +1,7 @@
+:mod:`gs.dmarc` API Reference
+=============================
+
+.. autoclass:: gs.dmarc.ReceiverPolicy
+   :members:
+
+.. autofunction:: gs.dmarc.lookup_receiver_policy
