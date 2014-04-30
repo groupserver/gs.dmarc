@@ -53,10 +53,10 @@ class TestLookup(TestCase):
         gs.dmarc.lookup.dns_query = MagicMock(side_effect=dns.resolver.NXDOMAIN)
         host = 'example.com'
         r = gs.dmarc.lookup.lookup_receiver_policy(host)
-        self.assertEqual(r, gs.dmarc.lookup.ReceiverPolicy.none)
+        self.assertEqual(r, gs.dmarc.lookup.ReceiverPolicy.noDmarc)
 
     def test_lookup_noanswer(self):
         gs.dmarc.lookup.dns_query = MagicMock(side_effect=dns.resolver.NoAnswer)
         host = 'example.com'
         r = gs.dmarc.lookup.lookup_receiver_policy(host)
-        self.assertEqual(r, gs.dmarc.lookup.ReceiverPolicy.none)
+        self.assertEqual(r, gs.dmarc.lookup.ReceiverPolicy.noDmarc)
