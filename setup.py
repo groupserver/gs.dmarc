@@ -33,7 +33,7 @@ setup(name='gs.dmarc',
     long_description=open("README.txt").read() + "\n" +
                       open(os.path.join("docs", "HISTORY.txt")).read(),
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         "Intended Audience :: Developers",
         'License :: OSI Approved :: Zope Public License',
         "Natural Language :: English",

@@ -1,11 +1,11 @@
 Changelog
 =========
 
-2.0.0 (2014-04-29)
-------------------
+2.0.0b (2014-04-29)
+-------------------
 
-* Added ``gs.dmarc.lookup.ReceiverPolicy.noDmarc``, and returning it from 
-  ``gs.dmarc.lookup.lookup_receiver_policy``. Bumped the version number
+* Added ``gs.dmarc.ReceiverPolicy.noDmarc``, and returning it from 
+  ``gs.dmarc.lookup_receiver_policy``. Bumped the version number
   because of this.
 * Added Sphinx documentation
 
