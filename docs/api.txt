@@ -1,6 +1,11 @@
 :mod:`gs.dmarc` API Reference
 =============================
 
+Currently only querying the `receiver policy`_ is supported.
+
+Receiver Policy
+---------------
+
 .. autoclass:: gs.dmarc.ReceiverPolicy
    :members:
 
