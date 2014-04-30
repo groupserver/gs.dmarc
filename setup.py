@@ -58,6 +58,7 @@ setup(name='gs.dmarc',
     include_package_data=True,
     zip_safe=False,
     install_requires=requires,
+    extras_require={'docs': ['Sphinx'], },
     test_suite="gs.dmarc.tests.test_all",
     tests_require=['mock', ],
     entry_points="""
