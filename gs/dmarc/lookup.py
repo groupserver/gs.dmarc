@@ -14,6 +14,7 @@
 ##############################################################################
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
+from os.path import join as path_join
 from dns.resolver import query as dns_query, NXDOMAIN, NoAnswer
 from publicsuffix import PublicSuffixList
 
@@ -108,11 +109,26 @@ product.
 .. _publicsuffixlist: https://pypi.python.org/pypi/publicsuffix
 '''
     # TODO: cope with email addresses
-    # TODO: cope with people putting _dmarc at the start of the host
+    # TODO: cope with people putting "_dmarc" at the start of the host
     retval = lookup_receiver_policy(host)
     if retval == ReceiverPolicy.noDmarc:
-        with open('suffixlist.txt', 'r') as suffixList:
+        # TODO: automatically update the suffix list data file
+        # <https://publicsuffix.org/list/effective_tld_names.dat>
+        fn = get_suffix_list_file_name()
+        with open(fn, 'r') as suffixList:
             psl = PublicSuffixList(suffixList)
             newHost = psl.get_public_suffix(host)
         retval = lookup_receiver_policy(newHost)
+    return retval
+
+
+def get_suffix_list_file_name():
+    '''Get the file name for the public-suffix list data file
+
+:returns: The filename for the datafile in this module.
+:rtype: ``str``
+'''
+    import gs.dmarc
+    modulePath = gs.dmarc.__path__[0]
+    retval = path_join(modulePath, 'suffixlist.txt')
     return retval
