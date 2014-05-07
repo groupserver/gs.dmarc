@@ -51,25 +51,11 @@ def answer_to_dict(answer):
 def lookup_receiver_policy(host):
     '''Lookup the reciever policy for a host. Returns a ReceiverPolicy.
 
-    :param str host: The host to query. The *actual* host that is queried has
-                     ``_dmarc.`` prepended to it.
-    :returns: The DMARC receiver policy for the host. If there is no published
-              then :attr:`gs.dmarc.ReceiverPolicy.noDmarc` is returned.
-    :rtype: A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.
-
-
-    The :func:`lookup_receiver_policy` function is intended to determine if
-    a DMARC receiver policy will cause issues for a particular host.
-
-    Example:
-        Get the host from an email address, and get the receiver policy::
-
-            addr = email.utils.parseaddr('mpj17@onlinegroups.net')
-            host = addr[1].split('@')[1]
-            policy = lookup_receiver_policy(host)
-
-            if (policy in (ReceiverPolicy.quarintine, ReceiverPolicy.reject)):
-                # Rewrite the From header
+:param str host: The host to query. The *actual* host that is queried has
+                 ``_dmarc.`` prepended to it.
+:returns: The DMARC receiver policy for the host. If there is no published
+          then :attr:`gs.dmarc.ReceiverPolicy.noDmarc` is returned.
+:rtype: A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.
 '''
     # TODO: Discard records that do not start with "v="
     #       Hint: <https://pypi.python.org/pypi/publicsuffix>
@@ -95,14 +81,27 @@ def receiver_policy(host):
 :returns: The reciever policy for the host.
 :rtype:  A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.
 
-The :func:`receiver_policy` function looks up the DMARC reciever polciy for
-``host``. If the host does not have a pubished policy `the organizational
-domain`_ is determined and the DMARC policy for this is returned.
+The :func:`receiver_policy` function looks up the DMARC reciever polciy
+for ``host``. If the host does not have a pubished policy `the
+organizational domain`_ is determined and the DMARC policy for this is
+returned. Internally the :func:`lookup_receiver_policy`
 
-**Acknowlegements:**
+**Example**
 
-    The organizational domain is determined by the publicsuffixlist_
-    product.
+
+Get the host from an email address, and get the receiver policy::
+
+    addr = email.utils.parseaddr('mpj17@onlinegroups.net')
+    host = addr[1].split('@')[1]
+    policy = receiver_policy(host)
+
+    if (policy in (ReceiverPolicy.quarintine, ReceiverPolicy.reject)):
+        # Rewrite the From header
+
+**Acknowlegements**
+
+The organizational domain is determined by the publicsuffixlist_
+product.
 
 .. _the organizational domain:
    http://tools.ietf.org/html/draft-kucherawy-dmarc-base-04#section-3.2
