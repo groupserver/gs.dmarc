@@ -27,18 +27,13 @@ Identified Mail [#dkim]_) and SPF (Sender Policy Framework
 
 Specifically this product supplies ``gs.dmarc.ReceiverPolciy``
 for enumerating [#enum34]_ the different DMARC policies, and the
-``lookup_receiver_policy`` function for querying the policy for a
+``receiver_policy`` function for querying the policy for a
 given domain.
-
-
-``lookup_receiver_policy``
-==========================
-
-Query the DMARC receiver policy for a host
 
 Resources
 =========
 
+- Documentation: http://gsdmarc.readthedocs.org/
 - Code repository: https://source.iopen.net/groupserver/gs.dmarc
 - Questions and comments to http://groupserver.org/groups/development
 - Report bugs at https://redmine.iopen.net/projects/groupserver

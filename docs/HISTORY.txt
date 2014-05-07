@@ -1,8 +1,15 @@
 Changelog
 =========
 
-2.0.0b (2014-04-29)
--------------------
+2.1.0 (2014-05-07)
+------------------
+
+* Added ``gs.dmarc.receiver_policy``, which looks up the
+  organisational domain.
+* Updated the Sphinx documentation.
+
+2.0.0 (2014-04-29)
+------------------
 
 * Added ``gs.dmarc.ReceiverPolicy.noDmarc``, and returning it from 
   ``gs.dmarc.lookup_receiver_policy``. Bumped the version number

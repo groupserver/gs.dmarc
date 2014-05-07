@@ -23,8 +23,8 @@ class ReceiverPolicy(Enum):
     '''An enumeration of the different receiver policies in DMARC.'''
     __order__ = 'noDmarc none quarantine reject'  # only needed in 2.x
 
-    #: No DMARC policy. Should be interpreted the same way as
-    #: :attr:`gs.dmarc.ReceiverPolicy.none`.
+    #: No published DMARC receiver-policy could be found. Often interpreted
+    #: the same way as :attr:`gs.dmarc.ReceiverPolicy.none`.
     noDmarc = 0
 
     #: The published policy is ``none``. Recieving parties are supposed to
@@ -55,11 +55,10 @@ def lookup_receiver_policy(host):
 :param str host: The host to query. The *actual* host that is queried has
                  ``_dmarc.`` prepended to it.
 :returns: The DMARC receiver policy for the host. If there is no published
-          then :attr:`gs.dmarc.ReceiverPolicy.noDmarc` is returned.
+          policy then :attr:`gs.dmarc.ReceiverPolicy.noDmarc` is returned.
 :rtype: A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.
 '''
     # TODO: Discard records that do not start with "v="
-    #       Hint: <https://pypi.python.org/pypi/publicsuffix>
     dmarcHost = '_dmarc.{0}'.format(host)
     try:
         dnsAnswer = dns_query(dmarcHost, 'TXT')
@@ -68,7 +67,7 @@ def lookup_receiver_policy(host):
     else:
         answer = str(dnsAnswer[0])
         tags = answer_to_dict(answer)
-        policy = tags.get('p', 'none')
+        policy = tags.get('p', 'none')  # CHECK: Is 'none' the right assumption?
         retval = ReceiverPolicy[policy]
 
     assert isinstance(retval, ReceiverPolicy)
@@ -83,30 +82,13 @@ def receiver_policy(host):
 :rtype:  A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.
 
 The :func:`receiver_policy` function looks up the DMARC reciever polciy
-for ``host``. If the host does not have a pubished policy `the
-organizational domain`_ is determined and the DMARC policy for this is
-returned. Internally the :func:`lookup_receiver_policy`
-
-**Example**
-
-Get the host from an email address, and get the receiver policy::
-
-    addr = email.utils.parseaddr('mpj17@onlinegroups.net')
-    host = addr[1].split('@')[1]
-    policy = receiver_policy(host)
-
-    if (policy in (ReceiverPolicy.quarintine, ReceiverPolicy.reject)):
-        # Rewrite the From header
-
-**Acknowlegements**
-
-The organizational domain is determined by the publicsuffixlist_
-product.
+for ``host``. If the host does not have a pubished policy
+`the organizational domain`_ is determined and the DMARC policy for this is
+returned. Internally the :func:`gs.dmarc.lookup.lookup_receiver_policy` is
+used to perform the query.
 
 .. _the organizational domain:
    http://tools.ietf.org/html/draft-kucherawy-dmarc-base-04#section-3.2
-
-.. _publicsuffixlist: https://pypi.python.org/pypi/publicsuffix
 '''
     # TODO: cope with email addresses
     # TODO: cope with people putting "_dmarc" at the start of the host
@@ -118,6 +100,7 @@ product.
         with open(fn, 'r') as suffixList:
             psl = PublicSuffixList(suffixList)
             newHost = psl.get_public_suffix(host)
+        # TODO: Look up the subdomain policy
         retval = lookup_receiver_policy(newHost)
     return retval
 
