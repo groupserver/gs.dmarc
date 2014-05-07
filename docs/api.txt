@@ -9,4 +9,8 @@ Receiver Policy
 .. autoclass:: gs.dmarc.ReceiverPolicy
    :members:
 
-.. autofunction:: gs.dmarc.lookup_receiver_policy
+.. autofunction:: gs.dmarc.receiver_policy
+
+Internal
+--------
+.. autofunction:: gs.dmarc.lookup.lookup_receiver_policy

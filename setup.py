@@ -19,7 +19,7 @@ from version import get_version
 
 version = get_version()
 
-requires = []
+requires = ['publicsuffix', ]
 if (sys.version_info < (3, 4)):
     requires += ['setuptools', 'enum34']
 if (sys.version_info >= (3, )):

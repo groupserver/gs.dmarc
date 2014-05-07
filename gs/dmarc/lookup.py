@@ -15,11 +15,12 @@
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
 from dns.resolver import query as dns_query, NXDOMAIN, NoAnswer
+from publicsuffix import PublicSuffixList
 
 
 class ReceiverPolicy(Enum):
     '''An enumeration of the different receiver policies in DMARC.'''
-    __order__ = 'none quarantine reject'  # only needed in 2.x
+    __order__ = 'noDmarc none quarantine reject'  # only needed in 2.x
 
     #: No DMARC policy. Should be interpreted the same way as
     #: :attr:`gs.dmarc.ReceiverPolicy.none`.
@@ -52,8 +53,8 @@ def lookup_receiver_policy(host):
 
     :param str host: The host to query. The *actual* host that is queried has
                      ``_dmarc.`` prepended to it.
-    :return: The DMARC receiver policy for the host. If there is no published
-             then :attr:`gs.dmarc.ReceiverPolicy.noDmarc` is returned.
+    :returns: The DMARC receiver policy for the host. If there is no published
+              then :attr:`gs.dmarc.ReceiverPolicy.noDmarc` is returned.
     :rtype: A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.
 
 
@@ -70,6 +71,8 @@ def lookup_receiver_policy(host):
             if (policy in (ReceiverPolicy.quarintine, ReceiverPolicy.reject)):
                 # Rewrite the From header
 '''
+    # TODO: Discard records that do not start with "v="
+    #       Hint: <https://pypi.python.org/pypi/publicsuffix>
     dmarcHost = '_dmarc.{0}'.format(host)
     try:
         dnsAnswer = dns_query(dmarcHost, 'TXT')
@@ -82,4 +85,35 @@ def lookup_receiver_policy(host):
         retval = ReceiverPolicy[policy]
 
     assert isinstance(retval, ReceiverPolicy)
+    return retval
+
+
+def receiver_policy(host):
+    '''Get the DMARC receiver policy for a host.
+
+:param str host: The host to lookup.
+:returns: The reciever policy for the host.
+:rtype:  A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.
+
+The :func:`receiver_policy` function looks up the DMARC reciever polciy for
+``host``. If the host does not have a pubished policy `the organizational
+domain`_ is determined and the DMARC policy for this is returned.
+
+**Acknowlegements:**
+
+    The organizational domain is determined by the publicsuffixlist_
+    product.
+
+.. _the organizational domain:
+   http://tools.ietf.org/html/draft-kucherawy-dmarc-base-04#section-3.2
+
+.. _publicsuffixlist: https://pypi.python.org/pypi/publicsuffix
+'''
+    # TODO: cope with email addresses
+    # TODO: cope with people putting _dmarc at the start of the host
+    retval = lookup_receiver_policy(host)
+    if retval == ReceiverPolicy.noDmarc:
+        psl = PublicSuffixList(host)
+        newHost = psl.get_public_suffix(host)
+        retval = lookup_receiver_policy(newHost)
     return retval
