@@ -88,7 +88,6 @@ returned. Internally the :func:`lookup_receiver_policy`
 
 **Example**
 
-
 Get the host from an email address, and get the receiver policy::
 
     addr = email.utils.parseaddr('mpj17@onlinegroups.net')
@@ -112,7 +111,8 @@ product.
     # TODO: cope with people putting _dmarc at the start of the host
     retval = lookup_receiver_policy(host)
     if retval == ReceiverPolicy.noDmarc:
-        psl = PublicSuffixList(host)
-        newHost = psl.get_public_suffix(host)
+        with open('suffixlist.txt', 'r') as suffixList:
+            psl = PublicSuffixList(suffixList)
+            newHost = psl.get_public_suffix(host)
         retval = lookup_receiver_policy(newHost)
     return retval
