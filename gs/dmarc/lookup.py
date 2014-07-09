@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
 # Copyright © 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
@@ -11,7 +11,7 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
 from os.path import join as path_join
@@ -35,8 +35,8 @@ class ReceiverPolicy(Enum):
     #: fails.
     quarantine = 2
 
-    #: Causes the system that is receiving the message to reject the message if
-    #: the verification fails.
+    #: Causes the system that is receiving the message to reject the
+    #: message if the verification fails.
     reject = 3
 
 
@@ -58,18 +58,25 @@ def lookup_receiver_policy(host):
           policy then :attr:`gs.dmarc.ReceiverPolicy.noDmarc` is returned.
 :rtype: A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.
 '''
-    # TODO: Discard records that do not start with "v="
     dmarcHost = '_dmarc.{0}'.format(host)
+    retval = ReceiverPolicy.noDmarc
     try:
         dnsAnswer = dns_query(dmarcHost, 'TXT')
     except (NXDOMAIN, NoAnswer):
-        retval = ReceiverPolicy.noDmarc
+        pass  # retval = ReceiverPolicy.noDmarc
     else:
         answer = str(dnsAnswer[0])
-        tags = answer_to_dict(answer)
-        policy = tags.get('p', 'none')  # CHECK: Is 'none' the right assumption?
-        retval = ReceiverPolicy[policy]
-
+        # Check that v= field is the first one in the answer (which is in
+        # double quotes) as per Section 7.1 (5):
+        #     In particular, the "v=DMARC1" tag is mandatory and MUST appear
+        #     first in the list. Discard any that do not pass this test.
+        # http://tools.ietf.org/html/draft-kucherawy-dmarc-base-04#section-7.1
+        if answer[:9] == '"v=DMARC1':
+            tags = answer_to_dict(answer)
+            # TODO: check that 'none' is the right assumption?
+            policy = tags.get('p', 'none')
+            retval = ReceiverPolicy[policy]
+        # else: retval = ReceiverPolicy.noDmarc
     assert isinstance(retval, ReceiverPolicy)
     return retval
 
@@ -78,7 +85,7 @@ def receiver_policy(host):
     '''Get the DMARC receiver policy for a host.
 
 :param str host: The host to lookup.
-:returns: The reciever policy for the host.
+:returns: The DMARC reciever policy for the host.
 :rtype:  A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.
 
 The :func:`receiver_policy` function looks up the DMARC reciever polciy
@@ -88,18 +95,17 @@ returned. Internally the :func:`gs.dmarc.lookup.lookup_receiver_policy` is
 used to perform the query.
 
 .. _the organizational domain:
-   http://tools.ietf.org/html/draft-kucherawy-dmarc-base-04#section-3.2
-'''
-    # TODO: cope with email addresses
-    # TODO: cope with people putting "_dmarc" at the start of the host
-    retval = lookup_receiver_policy(host)
+   http://tools.ietf.org/html/draft-kucherawy-dmarc-base-04#section-3.2'''
+    hostSansDmarc = host if host[:7] != '_dmarc.' else host[7:]
+
+    retval = lookup_receiver_policy(hostSansDmarc)
     if retval == ReceiverPolicy.noDmarc:
         # TODO: automatically update the suffix list data file
         # <https://publicsuffix.org/list/effective_tld_names.dat>
         fn = get_suffix_list_file_name()
         with open(fn, 'r') as suffixList:
             psl = PublicSuffixList(suffixList)
-            newHost = psl.get_public_suffix(host)
+            newHost = psl.get_public_suffix(hostSansDmarc)
         # TODO: Look up the subdomain policy
         retval = lookup_receiver_policy(newHost)
     return retval
