@@ -22,7 +22,7 @@ version = get_version()
 
 with codecs.open('README.rst', encoding='utf-8') as f:
     long_description = f.read()
-with codecs.open(os.path.join("docs", "HISTORY.txt"),
+with codecs.open(os.path.join("docs", "HISTORY.rst"),
                  encoding='utf-8') as f:
     long_description += '\n' + f.read()
 
