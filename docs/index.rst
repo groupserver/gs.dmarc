@@ -27,7 +27,7 @@ Resources
 =========
 
 - Documentation: http://gsdmarc.readthedocs.org/
-- Code repository: https://source.iopen.net/groupserver/gs.dmarc
+- Code repository: https://github.com/groupserver/gs.dmarc
 - Questions and comments to http://groupserver.org/groups/development
 - Report bugs at https://redmine.iopen.net/projects/groupserver
 
