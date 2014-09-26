@@ -7,7 +7,7 @@ Look up and report on the DMARC status of a domain
 
 :Author: `Michael JasonSmith`_
 :Contact: Michael JasonSmith <mpj17@onlinegroups.net>
-:Date: 2014-04-23
+:Date: 2014-09-29
 :Organization: `GroupServer.org`_
 :Copyright: This document is licensed under a
   `Creative Commons Attribution-Share Alike 4.0 International License`_
@@ -34,7 +34,7 @@ Resources
 =========
 
 - Documentation: http://gsdmarc.readthedocs.org/
-- Code repository: https://source.iopen.net/groupserver/gs.dmarc
+- Code repository: https://github.com/groupserver/gs.dmarc
 - Questions and comments to http://groupserver.org/groups/development
 - Report bugs at https://redmine.iopen.net/projects/groupserver
  

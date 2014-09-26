@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1.2 (2014-09-26)
+------------------
+
+* Switching to GitHub as the primary code repository.
+
 2.1.1 (2014-07-09)
 ------------------
 
