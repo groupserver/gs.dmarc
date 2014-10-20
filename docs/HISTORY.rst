@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.1.3 (2014-10-20)
+------------------
+
+* Handling domains with invalid DMARC policies, closing `Bug 4135
+  <https://redmine.iopen.net/issues/4135>`_
+
 2.1.2 (2014-09-26)
 ------------------
 
