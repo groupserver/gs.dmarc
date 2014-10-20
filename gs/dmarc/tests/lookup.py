@@ -59,6 +59,11 @@ class TestLookup(TestCase):
         r = self.lookup_receiver_policy('quarantine')
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.quarantine, r)
 
+    def test_lookup_monitor(self):
+        'Test the reciever-policy "monitor", which is not a reciever policy'
+        r = self.lookup_receiver_policy('monitor')
+        self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.noDmarc, r)
+
     def test_lookup_nxdomain(self):
         'Test a failed lookup of a domain (non-existant domain).'
         with patch('gs.dmarc.lookup.dns_query') as faux_query:
