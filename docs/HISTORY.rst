@@ -1,43 +1,57 @@
 Changelog
 =========
 
+2.1.4 (2015-06-25)
+------------------
+
+* Fixing a spelling mistake in the README, thanks to `Stefano
+  Brentegani`_
+* Updating the documentation, as DMARC is now :rfc:`7489`
+
+.. _Stefano Brentegani: https://github.com/brente
+
 2.1.3 (2014-10-20)
 ------------------
 
-* Handling domains with invalid DMARC policies, closing `Bug 4135
-  <https://redmine.iopen.net/issues/4135>`_
+* Handling domains with invalid DMARC policies, closing `Bug 4135`_
+
+.. _Bug 4135: <https://redmine.iopen.net/issues/4135
 
 2.1.2 (2014-09-26)
 ------------------
 
-* Switching to GitHub as the primary code repository.
+* Switching to GitHub_ as the primary code repository.
+
+.. _GitHub: https://github.com/groupserver/gs.dmarc
 
 2.1.1 (2014-07-09)
 ------------------
 
-* Cope when the host-name passed to ``lookup_receiver_policy``
-  for hosts that start with ``_dmarc`` already.
-* Reject all answers that do not start with ``v=DMARC1``, as per
-  `Section 7.1`_ (number 5) of the DMARC specification.
+* Coping when the host-name passed to ``lookup_receiver_policy``
+  for hosts that start with ``_dmarc`` already
+* Rejecting all answers that do not start with ``v=DMARC1``, as
+  per `Section 7.1`_ (number 5) of the draft DMARC specification
 
-.. _Section 7.1: http://tools.ietf.org/html/draft-kucherawy-dmarc-base-04#section-7.1
+.. _Section 7.1:
+   http://tools.ietf.org/html/draft-kucherawy-dmarc-base-04#section-7.1
 
 2.1.0 (2014-05-07)
 ------------------
 
-* Added ``gs.dmarc.receiver_policy``, which looks up the
-  organisational domain.
-* Updated the Sphinx documentation.
+* Adding ``gs.dmarc.receiver_policy``, which looks up the
+  organisational domain
+* Updating the Sphinx documentation
 
 2.0.0 (2014-04-29)
 ------------------
 
-* Added ``gs.dmarc.ReceiverPolicy.noDmarc``, and returning it from 
-  ``gs.dmarc.lookup_receiver_policy``. Bumped the version number
-  because of this.
-* Added Sphinx documentation
+* Adding ``gs.dmarc.ReceiverPolicy.noDmarc``, and returning it
+  from ``gs.dmarc.lookup_receiver_policy``
+* Adding Sphinx documentation
 
 1.0.0 (2014-04-24)
 ------------------
 
-* Initial release
+Initial release.
+
+..  LocalWords:  Changelog GitHub README
