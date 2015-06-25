@@ -25,7 +25,7 @@ the verification fails. It is an extension of DKIM (DomainKeys
 Identified Mail [#dkim]_) and SPF (Sender Policy Framework
 [#spf]_).
 
-Specifically this product supplies ``gs.dmarc.ReceiverPolciy``
+Specifically this product supplies ``gs.dmarc.ReceiverPolicy``
 for enumerating [#enum34]_ the different DMARC policies, and the
 ``receiver_policy`` function for querying the policy for a
 given domain.
