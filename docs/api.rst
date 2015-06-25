@@ -1,6 +1,8 @@
 :mod:`gs.dmarc` API Reference
 =============================
 
+.. currentmodule:: gs.dmarc
+
 Currently only querying the DMARC `receiver policy`_ is
 supported.
 
@@ -16,10 +18,10 @@ a domain that starts with ``_dmarc``. It is possible to use the
   $ host -t TXT _dmarc.yahoo.com
   _dmarc.yahoo.com descriptive text "v=DMARC1\; p=reject\; sp=none\; pct=100\; rua=mailto:dmarc-yahoo-rua@yahoo-inc.com, mailto:dmarc_y_rua@yahoo.com\;"
 
-The :func:`gs.dmarc.receiver_policy` function performs the DNS
-query, parses the results, and returns the policy for the
-host. The different policies are listed by the
-:class:`gs.dmarc.ReceiverPolicy` enumeration.
+The :func:`receiver_policy` function performs the DNS query,
+parses the results, and returns the policy for the host. The
+different policies are listed by the :class:`ReceiverPolicy`
+enumeration.
 
 .. autofunction:: gs.dmarc.receiver_policy
 
@@ -60,9 +62,9 @@ Get the host from an email address, and get the receiver policy.
 Internal
 --------
 
-Internally the :func:`gs.dmarc.lookup.lookup_receiver_policy`
+Internally the :func:`lookup.lookup_receiver_policy`
 function is used to make a DNS query, parse the arguments, and
-return a member from the :class:`gs.dmarc.ReceiverPolicy`
+return a member from the :class:`ReceiverPolicy`
 enumeration.
 
 .. autofunction:: gs.dmarc.lookup.lookup_receiver_policy
