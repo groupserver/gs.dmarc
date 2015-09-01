@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# Copyright © 2014 OnlineGroups.net and Contributors.
+# Copyright © 2014, 2015 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -75,6 +75,13 @@ class TestLookup(TestCase):
         'Test a failed lookup of a domain (no answer).'
         with patch('gs.dmarc.lookup.dns_query') as faux_query:
             faux_query.side_effect = dns.resolver.NoAnswer
+            r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
+        self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.noDmarc, r)
+
+    def test_lookup_nonameservers(self):
+        'Test a failed lookup of a domain (no name servers).'
+        with patch('gs.dmarc.lookup.dns_query') as faux_query:
+            faux_query.side_effect = dns.resolver.NoNameservers
             r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.noDmarc, r)
 
