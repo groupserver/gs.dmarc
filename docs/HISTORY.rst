@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.1.5 (2015-09-01)
+------------------
+
+* Catching ``dns.resolver.NoNameserver`` exceptions, thanks to
+  `Alexy Mikhailichenko`_
+
+.. _Alexy Mikhailichenko: https://github.com/alexymik
+
 2.1.4 (2015-06-25)
 ------------------
 
