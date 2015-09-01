@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# Copyright © 2014 OnlineGroups.net and Contributors.
+# Copyright © 2014, 2015 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -15,7 +15,8 @@
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
 from os.path import join as path_join
-from dns.resolver import query as dns_query, NXDOMAIN, NoAnswer, NoNameserver
+from dns.resolver import (query as dns_query, NXDOMAIN, NoAnswer,
+                          NoNameservers)
 from publicsuffix import PublicSuffixList
 
 
@@ -62,7 +63,7 @@ def lookup_receiver_policy(host):
     retval = ReceiverPolicy.noDmarc
     try:
         dnsAnswer = dns_query(dmarcHost, 'TXT')
-    except (NXDOMAIN, NoAnswer, NoNameserver):
+    except (NXDOMAIN, NoAnswer, NoNameservers):
         pass  # retval = ReceiverPolicy.noDmarc
     else:
         answer = str(dnsAnswer[0])
