@@ -15,7 +15,7 @@
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
 from os.path import join as path_join
-from dns.resolver import query as dns_query, NXDOMAIN, NoAnswer
+from dns.resolver import query as dns_query, NXDOMAIN, NoAnswer, NoNameserver
 from publicsuffix import PublicSuffixList
 
 
@@ -62,7 +62,7 @@ def lookup_receiver_policy(host):
     retval = ReceiverPolicy.noDmarc
     try:
         dnsAnswer = dns_query(dmarcHost, 'TXT')
-    except (NXDOMAIN, NoAnswer):
+    except (NXDOMAIN, NoAnswer, NoNameserver):
         pass  # retval = ReceiverPolicy.noDmarc
     else:
         answer = str(dnsAnswer[0])
