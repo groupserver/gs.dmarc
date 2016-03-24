@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.1.6 (2016-03-24)
+------------------
+
+* Updating the suffix list from Mozilla, thanks to `Baran
+  Kaynak`_
+
+.. _Baran Kaynak: https://github.com/barankaynak
+
 2.1.5 (2015-09-01)
 ------------------
 
