@@ -18,6 +18,7 @@ import sys
 from setuptools import setup, find_packages
 from version import get_version
 
+name = 'gs.dmarc'
 version = get_version()
 
 with codecs.open('README.rst', encoding='utf-8') as f:
@@ -34,7 +35,7 @@ if (sys.version_info >= (3, )):
 else:
     requires += ['dnspython >= 1.11.1']
 
-setup(name='gs.dmarc',
+setup(name=name,
       version=version,
       description="Look up and report on the DMARC status of a domain.",
       long_description=long_description,
@@ -57,7 +58,7 @@ setup(name='gs.dmarc',
       keywords='DKIM, SPF, DMARC, email, RFC 7489, RFC 6376, RFC 4408',
       author='Michael JasonSmith',
       author_email='mpj17@onlinegroups.net',
-      url='https://github.com/groupserver/gs.dmarc/',
+      url='https://github.com/groupserver/{0}'.format(name),
       license='ZPL 2.1',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['gs'],
@@ -65,7 +66,7 @@ setup(name='gs.dmarc',
       zip_safe=False,
       install_requires=requires,
       extras_require={'docs': ['Sphinx', ], },
-      test_suite="gs.dmarc.tests.test_all",
+      test_suite="{0}.tests.test_all".format(name),
       tests_require=['mock', ],
       entry_points="""
           # -*- Entry points: -*-
