@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.1.7 (2016-04-11)
+------------------
+
+* Testing with Python 3.5
+* Switching to dictionary-comprehensions
+
 2.1.6 (2016-03-24)
 ------------------
 
