@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# Copyright © 2014, 2015 OnlineGroups.net and Contributors.
+# Copyright © 2014, 2015, 2016 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -45,8 +45,7 @@ def answer_to_dict(answer):
     '''Turn the DNS DMARC answer into a dict of tag:value pairs.'''
     a = answer.strip('"').strip(' ')
     rawTags = [t.split('=') for t in a.split(';') if t]
-    tags = [(t[0].strip(), t[1].strip()) for t in rawTags]
-    retval = dict(tags)
+    retval = {t[0].strip(): t[1].strip() for t in rawTags}
     return retval
 
 
