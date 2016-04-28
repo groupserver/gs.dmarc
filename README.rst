@@ -36,7 +36,7 @@ given domain.
 Resources
 =========
 
-- Documentation: http://gsdmarc.readthedocs.org/
+- Documentation: http://gsdmarc.readthedocs.io/
 - Code repository: https://github.com/groupserver/gs.dmarc
 - Questions and comments to
   http://groupserver.org/groups/development
