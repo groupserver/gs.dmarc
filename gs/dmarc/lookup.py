@@ -15,6 +15,7 @@
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
 from os.path import join as path_join
+from typing import Dict, Text
 from dns.resolver import (query as dns_query, NXDOMAIN, NoAnswer,
                           NoNameservers)
 from publicsuffix import PublicSuffixList
@@ -42,6 +43,7 @@ class ReceiverPolicy(Enum):
 
 
 def answer_to_dict(answer):
+    # type: (Text) -> Dict[unicode, unicode]
     '''Turn the DNS DMARC answer into a dict of tag:value pairs.'''
     a = answer.strip('"').strip(' ')
     rawTags = [t.split('=') for t in a.split(';') if t]
@@ -50,14 +52,14 @@ def answer_to_dict(answer):
 
 
 def lookup_receiver_policy(host):
+    # type: (str) -> ReceiverPolicy
     '''Lookup the reciever policy for a host. Returns a ReceiverPolicy.
 
 :param str host: The host to query. The *actual* host that is queried has
                  ``_dmarc.`` prepended to it.
 :returns: The DMARC receiver policy for the host. If there is no published
           policy then :attr:`gs.dmarc.ReceiverPolicy.noDmarc` is returned.
-:rtype: A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.
-'''
+:rtype: A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.'''
     dmarcHost = '_dmarc.{0}'.format(host)
     retval = ReceiverPolicy.noDmarc
     try:
@@ -76,13 +78,14 @@ def lookup_receiver_policy(host):
             # TODO: check that 'none' is the right assumption?
             p = tags.get('p', 'none')
             policy = p if hasattr(ReceiverPolicy, p) else 'noDmarc'
-            retval = ReceiverPolicy[policy]
+            # https://github.com/python/mypy/issues/1381
+            retval = ReceiverPolicy[policy]  # type: ignore
         # else: retval = ReceiverPolicy.noDmarc
-    assert isinstance(retval, ReceiverPolicy)
     return retval
 
 
 def receiver_policy(host):
+    # type: (str) -> ReceiverPolicy
     '''Get the DMARC receiver policy for a host.
 
 :param str host: The host to lookup.
@@ -104,7 +107,7 @@ used to perform the query.
         # TODO: automatically update the suffix list data file
         # <https://publicsuffix.org/list/effective_tld_names.dat>
         fn = get_suffix_list_file_name()
-        with open(fn, 'r') as suffixList:
+        with open(fn, b'r') as suffixList:
             psl = PublicSuffixList(suffixList)
             newHost = psl.get_public_suffix(hostSansDmarc)
         # TODO: Look up the subdomain policy
@@ -113,11 +116,11 @@ used to perform the query.
 
 
 def get_suffix_list_file_name():
+    # type: () -> str
     '''Get the file name for the public-suffix list data file
 
 :returns: The filename for the datafile in this module.
-:rtype: ``str``
-'''
+:rtype: ``str``'''
     import gs.dmarc
     modulePath = gs.dmarc.__path__[0]
     retval = path_join(modulePath, 'suffixlist.txt')
