@@ -14,7 +14,7 @@
 ############################################################################
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
-from os.path import join as path_join
+from pkg_resources import resource_filename  # Part of setuptools
 try:
     # typing is needed by mypy, but is unused otherwise
     from typing import Dict, Text  # noqa: F401
@@ -108,8 +108,6 @@ used to perform the query.
 
     retval = lookup_receiver_policy(hostSansDmarc)
     if retval == ReceiverPolicy.noDmarc:
-        # TODO: automatically update the suffix list data file
-        # <https://publicsuffix.org/list/effective_tld_names.dat>
         fn = get_suffix_list_file_name()
         with open(fn) as suffixList:
             psl = PublicSuffixList(suffixList)
@@ -125,7 +123,7 @@ def get_suffix_list_file_name():
 
 :returns: The filename for the datafile in this module.
 :rtype: ``str``'''
-    import gs.dmarc
-    modulePath = gs.dmarc.__path__[0]
-    retval = path_join(modulePath, 'suffixlist.txt')
+    # TODO: automatically update the suffix list data file
+    # <https://publicsuffix.org/list/effective_tld_names.dat>
+    retval = resource_filename('gs.dmarc', 'suffixlist.txt')
     return retval
