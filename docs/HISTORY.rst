@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.1.8 (2016-10-18)
+------------------
+
+* Adding :pep:`484` type hints
+* Updating the public-suffix list
+* Using :mod:`setuptools` to return the public-suffix list
+
 2.1.7 (2016-04-11)
 ------------------
 
