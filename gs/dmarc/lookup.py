@@ -15,7 +15,8 @@
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
 from os.path import join as path_join
-from typing import Dict, Text
+# typing is needed by mypy, but is unused otherwise
+from typing import Dict, Text  # noqa: F401
 from dns.resolver import (query as dns_query, NXDOMAIN, NoAnswer,
                           NoNameservers)
 from publicsuffix import PublicSuffixList
