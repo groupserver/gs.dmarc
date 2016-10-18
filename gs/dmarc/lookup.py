@@ -15,8 +15,11 @@
 from __future__ import absolute_import, unicode_literals
 from enum import Enum
 from os.path import join as path_join
-# typing is needed by mypy, but is unused otherwise
-from typing import Dict, Text  # noqa: F401
+try:
+    # typing is needed by mypy, but is unused otherwise
+    from typing import Dict, Text  # noqa: F401
+except ImportError:
+    pass
 from dns.resolver import (query as dns_query, NXDOMAIN, NoAnswer,
                           NoNameservers)
 from publicsuffix import PublicSuffixList
@@ -108,7 +111,7 @@ used to perform the query.
         # TODO: automatically update the suffix list data file
         # <https://publicsuffix.org/list/effective_tld_names.dat>
         fn = get_suffix_list_file_name()
-        with open(fn, b'r') as suffixList:
+        with open(fn) as suffixList:
             psl = PublicSuffixList(suffixList)
             newHost = psl.get_public_suffix(hostSansDmarc)
         # TODO: Look up the subdomain policy
@@ -117,7 +120,7 @@ used to perform the query.
 
 
 def get_suffix_list_file_name():
-    # type: () -> str
+    # type: () -> Text
     '''Get the file name for the public-suffix list data file
 
 :returns: The filename for the datafile in this module.
