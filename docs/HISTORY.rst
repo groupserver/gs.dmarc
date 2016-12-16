@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.1.9 (2016-12-16)
+------------------
+
+* Falling back to the either the overall subdomain-policy or
+  overall domain-policy if a subdomain lacks a specific published
+  DMARC record — with thanks to Igor Colombi for pointing out
+  the issue
+
 2.1.8 (2016-10-18)
 ------------------
 
@@ -61,8 +69,7 @@ Changelog
 * Rejecting all answers that do not start with ``v=DMARC1``, as
   per `Section 7.1`_ (number 5) of the draft DMARC specification
 
-.. _Section 7.1:
-   http://tools.ietf.org/html/draft-kucherawy-dmarc-base-04#section-7.1
+.. _Section 7.1: https://tools.ietf.org/html/rfc7489#section-7.1
 
 2.1.0 (2014-05-07)
 ------------------
