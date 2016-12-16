@@ -85,7 +85,7 @@ def lookup_receiver_policy(host, policyTag='p'):
         if answer[:9] == '"v=DMARC1':
             tags = answer_to_dict(answer)
             # TODO: check that 'none' is the right assumption?
-            p = tags.get('p', 'none')
+            p = tags.get(policyTag, 'none')
             policy = p if hasattr(ReceiverPolicy, p) else 'noDmarc'
             # https://github.com/python/mypy/issues/1381
             retval = ReceiverPolicy[policy]  # type: ignore
