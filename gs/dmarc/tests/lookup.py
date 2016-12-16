@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# Copyright © 2014, 2015 OnlineGroups.net and Contributors.
+# Copyright © 2014, 2015, 2016 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -12,7 +12,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ############################################################################
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, unicode_literals, print_function
 from unittest import TestCase
 import dns.resolver
 from mock import patch
@@ -128,3 +128,13 @@ class TestLookup(TestCase):
         r  = gs.dmarc.lookup.lookup_receiver_policy('example.com', policyTag='sp')
 
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.none, r)
+
+    @patch('gs.dmarc.lookup.dns_query')
+    def test_lookup_policy_fallback(self, faux_query):
+        '''Test that the value of the ``p`` tag is returned if the ``sp``policy is absent.'''
+        q = self.create_response('reject')[0]
+        # Remove the subdomain policy from the DNS return
+        faux_query.return_value = [q.replace('sp=none; ', ''), ]
+        r  = gs.dmarc.lookup.lookup_receiver_policy('example.com', policyTag='sp')
+
+        self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.reject, r)
