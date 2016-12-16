@@ -55,15 +55,20 @@ def answer_to_dict(answer):
     return retval
 
 
-def lookup_receiver_policy(host):
-    # type: (str) -> ReceiverPolicy
+def lookup_receiver_policy(host, policyTag='p'):
+    # type: (str, str) -> ReceiverPolicy
     '''Lookup the reciever policy for a host. Returns a ReceiverPolicy.
 
 :param str host: The host to query. The *actual* host that is queried has
                  ``_dmarc.`` prepended to it.
+:param str policyTag: The *tag* that holds the receiver policy. Must be
+                      ``p`` (the default) or ``sp`` (for the subdomain
+                      policy). See :rfc:`7489#section-6.3`.
 :returns: The DMARC receiver policy for the host. If there is no published
           policy then :attr:`gs.dmarc.ReceiverPolicy.noDmarc` is returned.
 :rtype: A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.'''
+    if policytTag not in ('p', 'sp'):
+        raise ValueError('policyTag must be "p" or "sp".')
     dmarcHost = '_dmarc.{0}'.format(host)
     retval = ReceiverPolicy.noDmarc
     try:

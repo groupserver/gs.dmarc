@@ -96,3 +96,8 @@ class TestLookup(TestCase):
             faux_query.return_value = queryResp
             r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.noDmarc, r)
+
+    def test_lookup_invalid_policy(self):
+        '''Test that an invalid policy tag raises an error'''
+        with self.assertRaises(ValueError):
+            lookup_receiver_policy('example.com', policyTag='Piranha')
