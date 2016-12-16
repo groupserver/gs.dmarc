@@ -107,6 +107,24 @@ class TestLookup(TestCase):
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.noDmarc, r)
 
     def test_lookup_invalid_policy(self):
-        '''Test that an invalid policy tag raises an error'''
+        '''Test that an invalid policy-tag raises an error'''
         with self.assertRaises(ValueError):
             gs.dmarc.lookup_receiver_policy('example.com', policyTag='Piranha')
+
+    @patch('gs.dmarc.lookup.dns_query')
+    def test_lookup_policy_tag(self, faux_query):
+        '''Test that explicitly using the ``p``policy tag is fine.'''
+        queryResp = self.create_response('reject')
+        faux_query.return_value = queryResp
+        r  = gs.dmarc.lookup.lookup_receiver_policy('example.com', policyTag='p')
+
+        self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.reject, r)
+
+    @patch('gs.dmarc.lookup.dns_query')
+    def test_lookup_subdomain_policy_tag(self, faux_query):
+        '''Test that explicitly using the ``sp``policy tag is fine.'''
+        queryResp = self.create_response('reject')
+        faux_query.return_value = queryResp
+        r  = gs.dmarc.lookup.lookup_receiver_policy('example.com', policyTag='sp')
+
+        self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.none, r)

@@ -12,7 +12,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ############################################################################
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, unicode_literals, print_function
 from enum import Enum
 from pkg_resources import resource_filename  # Part of setuptools
 try:
@@ -89,7 +89,6 @@ def lookup_receiver_policy(host, policyTag='p'):
             policy = p if hasattr(ReceiverPolicy, p) else 'noDmarc'
             # https://github.com/python/mypy/issues/1381
             retval = ReceiverPolicy[policy]  # type: ignore
-        # else: retval = ReceiverPolicy.noDmarc
     return retval
 
 
