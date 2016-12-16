@@ -52,6 +52,9 @@ class TestReceiverPolicy(TestCase):
 
         cc = gs.dmarc.lookup.lookup_receiver_policy.call_count
         self.assertEqual(2, cc)
+        self.assertEqual(gs.dmarc.lookup.lookup_receiver_policy.call_args,
+                         (('example.com', ), {'policyTag': 'sp'}),
+                         'Failed to look up the subdomain policy')
         self.assertEqual(1, psl.get_public_suffix.call_count)
         self.assertEqual(r, ReceiverPolicy.noDmarc)
 

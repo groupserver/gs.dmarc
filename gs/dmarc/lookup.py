@@ -107,9 +107,11 @@ def receiver_policy(host):
 
 The :func:`receiver_policy` function looks up the DMARC reciever polciy
 for ``host``. If the host does not have a pubished policy
-`the organizational domain`_ is determined and the DMARC policy for this is
-returned. Internally the :func:`gs.dmarc.lookup.lookup_receiver_policy` is
-used to perform the query.
+`the organizational domain`_ is determined. The DMARC policy for the
+organizational domain is queried, and the subdomain policy is reuturned
+(if specified) or the overall policy for the domain is returned.
+Internally the :func:`gs.dmarc.lookup.lookup_receiver_policy` is used to
+perform the query.
 
 .. _the organizational domain:
    http://tools.ietf.org/html/draft-kucherawy-dmarc-base-04#section-3.2'''
@@ -121,8 +123,7 @@ used to perform the query.
         with open(fn) as suffixList:
             psl = PublicSuffixList(suffixList)
             newHost = psl.get_public_suffix(hostSansDmarc)
-        # TODO: Look up the subdomain policy
-        retval = lookup_receiver_policy(newHost)
+        retval = lookup_receiver_policy(newHost, policyTag='sp')
     return retval
 
 
