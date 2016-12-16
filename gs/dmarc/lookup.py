@@ -67,7 +67,7 @@ def lookup_receiver_policy(host, policyTag='p'):
 :returns: The DMARC receiver policy for the host. If there is no published
           policy then :attr:`gs.dmarc.ReceiverPolicy.noDmarc` is returned.
 :rtype: A member of the :class:`gs.dmarc.ReceiverPolicy` enumeration.'''
-    if policytTag not in ('p', 'sp'):
+    if policyTag not in ('p', 'sp'):
         raise ValueError('policyTag must be "p" or "sp".')
     dmarcHost = '_dmarc.{0}'.format(host)
     retval = ReceiverPolicy.noDmarc

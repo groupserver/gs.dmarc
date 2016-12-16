@@ -100,4 +100,4 @@ class TestLookup(TestCase):
     def test_lookup_invalid_policy(self):
         '''Test that an invalid policy tag raises an error'''
         with self.assertRaises(ValueError):
-            lookup_receiver_policy('example.com', policyTag='Piranha')
+            gs.dmarc.lookup_receiver_policy('example.com', policyTag='Piranha')
