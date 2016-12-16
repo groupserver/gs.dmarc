@@ -42,59 +42,68 @@ class TestLookup(TestCase):
     def assertPolicy(self, expected, val):
         m = 'Expected the policy {0}, got {1}'
         msg = m.format(expected, val)
+
         self.assertEqual(expected, val, msg)
 
     def test_lookup_none(self):
         'Test the reciever-policy "none"'
         r = self.lookup_receiver_policy('none')
+
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.none, r)
 
     def test_lookup_reject(self):
         'Test the reciever-policy "reject"'
         r = self.lookup_receiver_policy('reject')
+
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.reject, r)
 
     def test_lookup_quarantine(self):
         'Test the reciever policy "quarantine".'
         r = self.lookup_receiver_policy('quarantine')
+
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.quarantine, r)
 
     def test_lookup_monitor(self):
         'Test the reciever-policy "monitor", which is not a reciever policy'
         r = self.lookup_receiver_policy('monitor')
+
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.noDmarc, r)
 
-    def test_lookup_nxdomain(self):
+    @patch('gs.dmarc.lookup.dns_query')
+    def test_lookup_nxdomain(self, faux_query):
         'Test a failed lookup of a domain (non-existant domain).'
-        with patch('gs.dmarc.lookup.dns_query') as faux_query:
-            faux_query.side_effect = dns.resolver.NXDOMAIN
-            r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
+        faux_query.side_effect = dns.resolver.NXDOMAIN
+        r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
+
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.noDmarc, r)
 
-    def test_lookup_noanswer(self):
+    @patch('gs.dmarc.lookup.dns_query')
+    def test_lookup_noanswer(self, faux_query):
         'Test a failed lookup of a domain (no answer).'
-        with patch('gs.dmarc.lookup.dns_query') as faux_query:
-            faux_query.side_effect = dns.resolver.NoAnswer
-            r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
+        faux_query.side_effect = dns.resolver.NoAnswer
+        r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
+
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.noDmarc, r)
 
-    def test_lookup_nonameservers(self):
+    @patch('gs.dmarc.lookup.dns_query')
+    def test_lookup_nonameservers(self, faux_query):
         'Test a failed lookup of a domain (no name servers).'
-        with patch('gs.dmarc.lookup.dns_query') as faux_query:
-            faux_query.side_effect = dns.resolver.NoNameservers
-            r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
+        faux_query.side_effect = dns.resolver.NoNameservers
+        r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
+
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.noDmarc, r)
 
-    def test_lookup_malformed(self):
+    @patch('gs.dmarc.lookup.dns_query')
+    def test_lookup_malformed(self, faux_query):
         '''Test that a response that does not start with "v= is interpreted
         as no DMARC.'''
         # A 'q' is not a '"'.
         a = self.create_response('reject')
         answer = 'q' + a[0]
         queryResp = [answer]
-        with patch('gs.dmarc.lookup.dns_query') as faux_query:
-            faux_query.return_value = queryResp
-            r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
+        faux_query.return_value = queryResp
+        r = gs.dmarc.lookup.lookup_receiver_policy('example.com')
+
         self.assertPolicy(gs.dmarc.lookup.ReceiverPolicy.noDmarc, r)
 
     def test_lookup_invalid_policy(self):
